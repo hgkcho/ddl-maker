@@ -68,6 +68,7 @@ var ForeignKeyOptionSetDefault ForeignKeyOptionType = "SET DEFAULT"
 
 // ForeignKey XXX
 type ForeignKey struct {
+	foreignConstraint  string
 	foreignColumns     []string
 	referenceTableName string
 	referenceColumns   []string
@@ -366,7 +367,9 @@ func (fk ForeignKey) ToSQL() string {
 	for _, rc := range fk.referenceColumns {
 		referenceColumnsStr = append(referenceColumnsStr, quote(rc))
 	}
-	sql := fmt.Sprintf("FOREIGN KEY (%s) REFERENCES %s (%s)",
+
+	sql := fmt.Sprintf("CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s)",
+		quote(fk.foreignConstraint),
 		strings.Join(foreignColumnsStr, ", "),
 		quote(fk.referenceTableName),
 		strings.Join(referenceColumnsStr, ", "))
@@ -420,8 +423,9 @@ func AddPrimaryKey(columns ...string) PrimaryKey {
 }
 
 // AddForeignKey XXX
-func AddForeignKey(foreignColumns, referenceColumns []string, referenceTableName string, option ...ForeingKeyOption) ForeignKey {
+func AddForeignKey(foreignConstraint string, foreignColumns, referenceColumns []string, referenceTableName string, option ...ForeingKeyOption) ForeignKey {
 	foreingKey := ForeignKey{
+		foreignConstraint:  foreignConstraint,
 		foreignColumns:     foreignColumns,
 		referenceTableName: referenceTableName,
 		referenceColumns:   referenceColumns,

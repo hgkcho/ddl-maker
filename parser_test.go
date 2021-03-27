@@ -35,7 +35,7 @@ func (t1 T1) PrimaryKey() dialect.PrimaryKey {
 
 func (t1 T1) ForeignKeys() dialect.ForeignKeys {
 	return dialect.ForeignKeys{
-		mysql.AddForeignKey([]string{"player_id"}, []string{"id"}, "player",
+		mysql.AddForeignKey("constraint_1", []string{"player_id"}, []string{"id"}, "player",
 			mysql.WithUpdateForeignKeyOption(mysql.ForeignKeyOptionNoAction),
 			mysql.WithDeleteForeignKeyOption(mysql.ForeignKeyOptionNoAction)),
 	}

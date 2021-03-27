@@ -158,31 +158,36 @@ func TestAddPrimaryKey(t *testing.T) {
 }
 
 func TestAddForeignKey(t *testing.T) {
+
+	constraint := "constraint_1"
 	foreignColumns := []string{"player_id"}
 	referenceColumns := []string{"id"}
-	fk := AddForeignKey(foreignColumns, referenceColumns, "player")
-	if fk.ToSQL() != "FOREIGN KEY (`player_id`) REFERENCES `player` (`id`)" {
+	fk := AddForeignKey(constraint, foreignColumns, referenceColumns, "player")
+	if fk.ToSQL() != "CONSTRAINT `constraint_1` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`)" {
 		t.Fatal("[error] parse foreign key", fk.ToSQL())
 	}
 
+	constraint = "constraint_2"
 	foreignColumns = []string{"product_category", "product_id"}
 	referenceColumns = []string{"category", "id"}
-	fk = AddForeignKey(foreignColumns, referenceColumns, "product")
-	if fk.ToSQL() != "FOREIGN KEY (`product_category`, `product_id`) REFERENCES `product` (`category`, `id`)" {
+	fk = AddForeignKey(constraint, foreignColumns, referenceColumns, "product")
+	if fk.ToSQL() != "CONSTRAINT `constraint_2` FOREIGN KEY (`product_category`, `product_id`) REFERENCES `product` (`category`, `id`)" {
 		t.Fatal("[error] parse foreign key", fk.ToSQL())
 	}
 
+	constraint = "constraint_3"
 	foreignColumns = []string{"product_category", "product_id"}
 	referenceColumns = []string{"category", "id"}
-	fk = AddForeignKey(foreignColumns, referenceColumns, "product", WithUpdateForeignKeyOption(ForeignKeyOptionNoAction), WithDeleteForeignKeyOption(ForeignKeyOptionNoAction))
-	if fk.ToSQL() != "FOREIGN KEY (`product_category`, `product_id`) REFERENCES `product` (`category`, `id`)" {
+	fk = AddForeignKey(constraint, foreignColumns, referenceColumns, "product", WithUpdateForeignKeyOption(ForeignKeyOptionNoAction), WithDeleteForeignKeyOption(ForeignKeyOptionNoAction))
+	if fk.ToSQL() != "CONSTRAINT `constraint_3` FOREIGN KEY (`product_category`, `product_id`) REFERENCES `product` (`category`, `id`)" {
 		t.Fatal("[error] parse foreign key", fk.ToSQL())
 	}
 
+	constraint = "constraint_4"
 	foreignColumns = []string{"product_category", "product_id"}
 	referenceColumns = []string{"category", "id"}
-	fk = AddForeignKey(foreignColumns, referenceColumns, "product", WithUpdateForeignKeyOption(ForeignKeyOptionCascade))
-	if fk.ToSQL() != "FOREIGN KEY (`product_category`, `product_id`) REFERENCES `product` (`category`, `id`) ON UPDATE CASCADE" {
+	fk = AddForeignKey(constraint, foreignColumns, referenceColumns, "product", WithUpdateForeignKeyOption(ForeignKeyOptionCascade))
+	if fk.ToSQL() != "CONSTRAINT `constraint_4` FOREIGN KEY (`product_category`, `product_id`) REFERENCES `product` (`category`, `id`) ON UPDATE CASCADE" {
 		t.Fatal("[error] parse foreign key", fk.ToSQL())
 	}
 }

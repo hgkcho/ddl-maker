@@ -21,11 +21,11 @@ CREATE TABLE `entry` (
     `content` TEXT NOT NULL,
     `created_at` DATETIME NOT NULL,
     `updated_at` DATETIME NOT NULL,
-    FULLTEXT `full_text_idx` (`content`) WITH PARSER ngram,
-    INDEX `created_at_idx` (`created_at`),
-    INDEX `title_idx` (`title`),
-    UNIQUE `created_at_uniq_idx` (`created_at`),
-    PRIMARY KEY (`id`, `created_at`)
+    FULLTEXT `full_text_idx` (`content`) WITH PARSER `ngram`,
+	INDEX `created_at_idx` (`created_at`),
+	INDEX `title_idx` (`title`),
+	UNIQUE `created_at_uniq_idx` (`created_at`),
+	PRIMARY KEY (`id`, `created_at`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4;
 
 
@@ -39,7 +39,7 @@ CREATE TABLE `player_comment` (
     `created_at` DATETIME NOT NULL,
     `updated_at` DATETIME NOT NULL,
     INDEX `player_id_entry_id_idx` (`player_id`, `entry_id`),
-    PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4;
 
 
@@ -52,7 +52,8 @@ CREATE TABLE `bookmark` (
     `created_at` DATETIME NOT NULL,
     `updated_at` DATETIME NOT NULL,
     UNIQUE `user_id_entry_id` (`user_id`, `entry_id`),
-    PRIMARY KEY (`id`)
+	CONSTRAINT `bookmark_cnst` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4;
 
 SET foreign_key_checks=1;

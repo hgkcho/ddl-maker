@@ -74,12 +74,23 @@ type Bookmark struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func (b Bookmark) PrimaryKey() dialect.PrimaryKey {
+func (b *Bookmark) PrimaryKey() dialect.PrimaryKey {
 	return mysql.AddPrimaryKey("id")
 }
 
-func (b Bookmark) Indexes() dialect.Indexes {
+func (b *Bookmark) Indexes() dialect.Indexes {
 	return dialect.Indexes{
 		mysql.AddUniqueIndex("user_id_entry_id", "user_id", "entry_id"),
+	}
+}
+
+func (*Bookmark) ForeignKeys() dialect.ForeignKeys {
+	return dialect.ForeignKeys{
+		mysql.AddForeignKey(
+			"bookmark_cnst",
+			[]string{"user_id"},
+			[]string{"id"},
+			"user",
+		),
 	}
 }

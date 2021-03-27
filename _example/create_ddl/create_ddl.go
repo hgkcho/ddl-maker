@@ -4,7 +4,7 @@ import (
 	"flag"
 	"log"
 
-	"github.com/kayac/ddl-maker"
+	ddlmaker "github.com/kayac/ddl-maker"
 	ex "github.com/kayac/ddl-maker/_example"
 )
 
@@ -51,9 +51,9 @@ func main() {
 
 	structs := []interface{}{
 		&ex.User{},
-		ex.Entry{},
-		ex.PlayerComment{},
-		ex.Bookmark{},
+		&ex.Entry{},
+		&ex.PlayerComment{},
+		&ex.Bookmark{},
 	}
 
 	dm.AddStruct(structs...)
